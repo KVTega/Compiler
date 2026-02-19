@@ -109,59 +109,63 @@ popScope()
 The compiler lowers AST into Three-Address Code (Quad format).
 
 Each instruction contains:
-
-Operation
-
-src1
-
-src2
-
-destination
-
-optional label
+<ul>
+  <li>Operation</li>
+  <li>src1</li>
+  <li>src2</li>
+  <li>destination</li>
+  <li>optional label</li>
+</ul>
 
 Example IR (conceptual)
 
 For:
-
+```
 x = a + b;
-
+```
 
 Generated IR:
 
+```
 t1 = a
 t2 = b
 t3 = t1 + t2
 x  = t3
+```
 </div>
 
 <div>
 <h2>Control Flow Generation</h2>
 Short-Circuit Boolean Logic
 
-Logical AND and OR use label-based branching:
+Logical ```AND``` and ```OR``` use label-based branching:
 
-AND evaluates right only if left is true
+<ul>
+  
+```AND``` evaluates right only if left is true
 
-OR evaluates right only if left is false
+```OR``` evaluates right only if left is false
+</ul>
 
 Implemented using dynamically generated labels:
-
+```
 __L0
 __L1
 __L2
+```
 </div>
 <div>
-While Loop Lowering
+<d2>While Loop Lowering</d2>
 
 Structure:
-
+```
 goto eval
 top:
     body
 eval:
     if (cond) goto top
 after:
+```
 
 </div>
 <div>
@@ -169,42 +173,41 @@ after:
 
 Offsets are computed per function:
 
-Parameters: positive offsets
 
-Locals: negative offsets
-
-Temporaries: inserted dynamically
-
+<ul>
+  <li>Parameters: positive offsets</li>
+  <li>Locals: negative offsets</li>
+  <li>Temporaries: inserted dynamically</li>
+</ul>
 Example layout:
 
+```
 | param n   |  +offset
 | param 1   |
 | return addr |
 | local 1   |  -offset
 | local 2   |
 | temp vars |
-
-
+```
 Offset calculation handled by:
 
+```
 get_offsets()
+```
 </div>
 <div>
 <h2>MIPS Code Generation</h2>
 
 The backend:
 
-Emits ENTER / LEAVE
-
-Generates CALL / RET
-
-Manages temporaries
-
-Emits branch instructions
-
-Generates label-based control flow
-
-Produces runnable assembly
+<ul>
+  <li>Emits ENTER / LEAVE</li>
+  <li>Generates CALL / RET</li>
+  <li>Manages temporaries</li>
+  <li>Emits branch instructions</li>
+  <li>Generates label-based control flow</li>
+  <li>Produces runnable assembly</li>
+</ul>
 
 Entry stub:
 
@@ -236,32 +239,33 @@ main:
 </div>
 <div>
 <h2>Build</h2>
+  
+```
 gcc *.c -o minic
 ./minic input.c > output.asm
-
+```
 
 Run with:
 
-MARS
+<ul>
+  <li>MARS</li>
+  <li>SPIM</li>
+</ul>
 
-SPIM
 </div>
 
 
 <div>
 <h1>Key Technical Highlights</h1>
 
-Manual AST memory management
+<ul>
+  <li>Manual AST memory management</li>
+  <li>Linked-list Quad IR</li>
+  <li>Short-circuit boolean lowering</li>
+  <li>Dynamic temporary variable allocation</li>
+  <li>Explicit stack frame construction</li>
+  <li>Label-based branching</li>
+  <li>Modular codegen per AST node type</li>
+</ul>
 
-Linked-list Quad IR
-
-Short-circuit boolean lowering
-
-Dynamic temporary variable allocation
-
-Explicit stack frame construction
-
-Label-based branching
-
-Modular codegen per AST node type
 </div>
